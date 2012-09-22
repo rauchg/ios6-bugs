@@ -1,0 +1,51 @@
+<!doctype html>
+<html>
+  <head>
+    <title>iOS Spinner testcase</title>
+    <style>
+      body { font-family: Helvetica, Arial; margin: 0; padding: 0; }
+      h1 { margin: 20px 0 20px 20px; font-size: 150%; }
+      h2 { margin: 20px; font-size: 11px; }
+      #log { font: 11px Monaco, Consolas, "Lucida Console", monospace; max-height: 400px; }
+      #log p { padding: 5px 20px; margin: 0; }
+      #log p:nth-child(odd) {
+        background: #eee;
+      }
+    </style>
+    <meta name="viewport" content="width=device-width, maximum-scale=1.0" />
+  </head>
+  <body>
+    <h1>iOS6 AJAX Cache Testcase</h1>
+    <h2><a href="/">Bug</a>, <a href="/cs-workaround">client-side workaround</a> and <a href="/ss-workaround">server-side workaround</a></h2>
+    <div id="log"></div>
+    <script>
+      var el = document.getElementById('log'), lastDate;
+      function log(msg){
+        var date = new Date;
+        var p = document.createElement('p');
+        if (lastDate) msg += ' +' + ((date - lastDate) / 1000) + 's';
+        p.innerText = msg;
+        el.appendChild(p);
+        lastDate = date;
+      }
+
+      function send(fn){
+        var req = new XMLHttpRequest();
+        req.open('POST', '/no-cache?' + Date.now(), true);
+        req.send(null);
+        req.onreadystatechange = function(){
+          if (4 == req.readyState) fn(req.responseText);
+        }
+      }
+
+      log('Sending two POST requests.');
+      send(function(data1){
+        log('#1 Responded with "' + data1 + '"');
+        send(function(data2){
+          log('#2 Responded with "' + data2 + '"');
+          log(data1 == data2 ? 'Data was cached ಠ_ಠ!' : 'Data was not cached');
+        });
+      });
+    </script>
+  </body>
+</html>

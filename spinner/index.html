@@ -1,0 +1,53 @@
+<!doctype html>
+<html>
+  <head>
+    <title>iOS Spinner testcase</title>
+    <style>
+      body { font-family: Helvetica, Arial; margin: 0; padding: 0; }
+      h1 { margin: 20px 0 20px 20px; font-size: 150%; }
+      #log { font: 11px Monaco, Consolas, "Lucida Console", monospace; max-height: 400px; }
+      #log p { padding: 5px 20px; margin: 0; }
+      #log p:nth-child(odd) {
+        background: #eee;
+      }
+    </style>
+    <meta name="viewport" content="width=device-width, maximum-scale=1.0" />
+  </head>
+  <body>
+    <h1>iOS6 Spinner Testcase</h1>
+    <div id="log"></div>
+    <script>
+      var el = document.getElementById('log'), lastDate;
+      function log(msg){
+        var date = new Date;
+        var p = document.createElement('p');
+        if (lastDate) msg += ' +' + ((date - lastDate) / 1000) + 's';
+        p.innerText = msg;
+        el.appendChild(p);
+        lastDate = date;
+      }
+
+      function send(fn){
+        var req = new XMLHttpRequest();
+        req.open('GET', '/poll', true);
+        req.send(null);
+        req.onreadystatechange = function(){
+          if (4 == req.readyState) fn();
+        }
+      }
+
+      function poll(){
+        send(function(){
+          log('Request complete. Polling again.');
+          poll();
+        });
+      }
+
+      // start polling cycle
+      log('Polling server.');
+      onload = function(){
+        setTimeout(poll, 100);
+      }
+    </script>
+  </body>
+</html>

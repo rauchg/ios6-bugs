@@ -1,0 +1,14 @@
+{
+  "name": "ios6-ajax-cache",
+  "version": "0.1.0",
+  "dependencies": {
+    "express": "3.0.0rc4"
+  },
+  "subdomain": "ios6-ajax-cache",
+  "scripts": {
+    "start": "server.js"
+  },
+  "engines": {
+    "node": "0.8.x"
+  }
+}
